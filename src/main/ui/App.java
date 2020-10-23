@@ -37,7 +37,7 @@ public class App {
             String command = input.nextLine();
             command = command.toUpperCase();
 
-            if (command.equals("N") || (command.contentEquals("EXIT"))) {
+            if  (command.contentEquals("EXIT")) {
                 contRunning = false;
                 exitScreen();
             } else {
@@ -50,7 +50,7 @@ public class App {
     // code from TellerApp
     public void processCommands(String command) {
         switch (command) {
-            case "Y":
+            case "S":
                 createEvent();
                 optionsScreen();
                 break;
@@ -114,7 +114,7 @@ public class App {
 
     //EFFECTS: displays menu of options to user
     public static void optionsScreen() {
-        System.out.println("Enter Y to schedule an event, or");
+        System.out.println("Enter S to schedule an event, or");
         System.out.println("Enter ? for more options.");
     }
 
@@ -151,7 +151,7 @@ public class App {
 
     public void find() {
         System.out.println("Please enter a time (HH:MM:SS).");
-        for (int i = 0; i < timeSched.size(); i++) {
+        for (int i = 0; i <= timeSched.size(); i++) {
             if (input.nextLine().equals(timeSched.get(i))) {
                 System.out.println(eventSched.get(i).getName() + " is scheduled for this time.");
             } else {
