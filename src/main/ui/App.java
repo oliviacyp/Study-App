@@ -19,32 +19,29 @@ public class App {
     private static final ArrayList<Event> eventSched = new ArrayList<>();
     private static final ArrayList<String> timeSched = new ArrayList<>();
 
+
     // EFFECTS: runs the scheduler application
-    public static void schedulerApp() {
+    public App() {
         runApp();
     }
 
     // MODIFIES: this
     // EFFECTS: processes user input
     // code from TellerApp
-    private static void runApp() {
+    private void runApp() {
         boolean contRunning = true;
-        String command = null;
 
         welcomeScreen();
-        createEvent();
+        optionsScreen();
 
         while (contRunning) {
-            optionsScreen();
-            command = input.nextLine();
+            String command = input.nextLine();
             command = command.toUpperCase();
+
             if (command.equals("N") || (command.contentEquals("EXIT"))) {
                 contRunning = false;
                 exitScreen();
-            } else if (command.contentEquals("?")) {
-                helpScreen();
             } else {
-                contRunning = false;
                 processCommands(command);
             }
         }
@@ -52,28 +49,26 @@ public class App {
 
     //EFFECTS: processes user command
     // code from TellerApp
-    public static void processCommands(String command) {
-        if (command.equals("Y")) {
-            createEvent();
-        } else if (command.equals("LIST")) {
-            System.out.println("You have " + eventSched.size() + " events today.");
-        } else if (command.equals("VIEW")) {
-            for (int i = 0; i < eventSched.size(); i++) {
-                Event e = eventSched.get(i);
-                if (e != null) {
-                    System.out.print(e.getName() + " at " + timeSched.get(i) + "\n");
-                }
-            }
-        } else if (command.equals("FIND")) {
-            for (int i = 0; i < timeSched.size(); i++) {
-                if (input.nextLine().equals(timeSched.get(i))) {
-                    System.out.println(eventSched.get(i).getName() + " is scheduled for this time.");
-                } else {
-                    System.out.println("Nothing is scheduled at this time.");
-                }
-            }
-        } else {
-            System.out.println("Please enter a valid command!");
+    public void processCommands(String command) {
+        switch (command) {
+            case "Y":
+                createEvent();
+                break;
+            case "?":
+                helpScreen();
+                break;
+            case "LIST":
+                list();
+                break;
+            case "VIEW":
+                view();
+                break;
+            case "FIND":
+                find();
+                break;
+            default:
+                System.out.println("Please enter a valid command!");
+                break;
         }
     }
 
@@ -114,11 +109,12 @@ public class App {
         Scheduler.addToEvents(event);
         Scheduler.addToTimes(scheduledTime);
 
+        System.out.println("Okay, your event has been set. Would you like to schedule another event? (Y/N)");
     }
 
     //EFFECTS: displays menu of options to user
     public static void optionsScreen() {
-        System.out.println("Okay, your event has been set. Would you like to schedule another event? (Y/N)");
+        System.out.println("Enter Y to start creating your schedule for today, or");
         System.out.println("Enter ? for more options.");
     }
 
@@ -131,7 +127,7 @@ public class App {
         System.out.println("EXIT to exit.");
     }
 
-    public static void exitScreen() {
+    public void exitScreen() {
         System.out.println("Your schedule for today is set!");
         System.out.println("~-~-~-Schedule-~-~-~");
         for (int i = 0; i < eventSched.size(); i++) {
@@ -141,5 +137,31 @@ public class App {
             }
         }
         System.out.println("Have a nice day!");
+    }
+
+    public void list() {
+        System.out.println("You have " + eventSched.size() + " events today.");
+    }
+
+    public void view() {
+        for (int i = 0; i < eventSched.size(); i++) {
+            Event e = eventSched.get(i);
+            if (e != null) {
+                System.out.print(e.getName() + " at " + timeSched.get(i) + "\n");
+            } else {
+                System.out.println("You have no events scheduled for today!");
+            }
+        }
+    }
+
+    public void find() {
+        System.out.println("Please enter a time (HH:MM:SS).");
+        for (int i = 0; i < timeSched.size(); i++) {
+            if (input.nextLine().equals(timeSched.get(i))) {
+                System.out.println(eventSched.get(i).getName() + " is scheduled for this time.");
+            } else {
+                System.out.println("Nothing is scheduled at this time.");
+            }
+        }
     }
 }
