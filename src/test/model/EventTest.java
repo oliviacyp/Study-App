@@ -9,7 +9,6 @@ public class EventTest {
 
 
     private Event testEvent;
-    private String name;
 
     @BeforeEach
     void runBefore() {
@@ -17,13 +16,8 @@ public class EventTest {
     }
 
     @Test
-    void testDisplayName() {
-//        assertEquals("testName", testEvent.displayName());
-    }
-
-    @Test
     void testGetName() {
-        assertEquals("testName", testEvent.getName());
+        assertEquals("testEvent", testEvent.getName());
     }
 
 }

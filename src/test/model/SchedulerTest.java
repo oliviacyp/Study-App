@@ -42,27 +42,4 @@ public class SchedulerTest {
         assertEquals(testTimeSched.get(0), "12:00:00");
     }
 
-    @Test
-    void testPrintSchedule() {
-        testEventSched.add(testEvent);
-        testTimeSched.add("12:00:00");
-//        assertEquals(Scheduler.printSchedule(), "testEvent at 12:00:00");
-
-    }
-
-    @Test
-    void testHowMany() {
-        testEventSched.add(testEvent);
-        testEventSched.add(testEvent2);
-        testEventSched.add(testEvent3);
-//        assertEquals(Scheduler.howMany(), "You have 3 events today.");
-
-    }
-
-    @Test
-    void testWhatNow() {
-        testEventSched.add(testEvent);
-        testTimeSched.add("12:00:00");
-//        assertEquals(Scheduler.whatNow("12:00:00"), "testEvent is scheduled for this time.");
-    }
 }
