@@ -127,16 +127,19 @@ public class App {
         System.out.println("EXIT to exit.");
     }
 
+    //EFFECTS: displays final schedule and closes program
     public void exitScreen() {
         System.out.println("Your schedule for today is set!");
         view();
         System.out.println("Have a nice day!");
     }
 
+    //EFFECTS: displays number of events scheduled
     public void list() {
         System.out.println("You have " + eventSched.size() + " events today.");
     }
 
+    //EFFECTS: displays full schedule
     public void view() {
         System.out.println("~-~-~-Schedule-~-~-~");
         for (int i = 0; i < eventSched.size(); i++) {
@@ -149,6 +152,7 @@ public class App {
         }
     }
 
+    //EFFECTS: finds and returns the event scheduled at the given time
     public void find() {
         System.out.println("Please enter a time (HH:MM:SS).");
         for (int i = 0; i <= timeSched.size(); i++) {
