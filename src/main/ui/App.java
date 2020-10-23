@@ -53,6 +53,7 @@ public class App {
         switch (command) {
             case "Y":
                 createEvent();
+                optionsScreen();
                 break;
             case "?":
                 helpScreen();
@@ -106,15 +107,15 @@ public class App {
         ScheduledExecutorService eventAlarm = Executors.newScheduledThreadPool(1);
         eventAlarm.schedule(runEvent, timeDiff, TimeUnit.SECONDS);
 
-        Scheduler.addToEvents(event);
-        Scheduler.addToTimes(scheduledTime);
+        eventSched.add(event);
+        timeSched.add(scheduledTime);
 
-        System.out.println("Okay, your event has been set. Would you like to schedule another event? (Y/N)");
+        System.out.println("Okay, your event has been set!");
     }
 
     //EFFECTS: displays menu of options to user
     public static void optionsScreen() {
-        System.out.println("Enter Y to start creating your schedule for today, or");
+        System.out.println("Enter Y to schedule an event, or");
         System.out.println("Enter ? for more options.");
     }
 
@@ -129,13 +130,7 @@ public class App {
 
     public void exitScreen() {
         System.out.println("Your schedule for today is set!");
-        System.out.println("~-~-~-Schedule-~-~-~");
-        for (int i = 0; i < eventSched.size(); i++) {
-            Event e = eventSched.get(i);
-            if (e != null) {
-                System.out.print(e.getName() + " at " + timeSched.get(i) + "\n");
-            }
-        }
+        view();
         System.out.println("Have a nice day!");
     }
 
@@ -144,6 +139,7 @@ public class App {
     }
 
     public void view() {
+        System.out.println("~-~-~-Schedule-~-~-~");
         for (int i = 0; i < eventSched.size(); i++) {
             Event e = eventSched.get(i);
             if (e != null) {
