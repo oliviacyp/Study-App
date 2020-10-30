@@ -1,10 +1,14 @@
 package ui;
 
-import model.Event;
+import model.Schedule;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -13,14 +17,18 @@ import java.util.concurrent.TimeUnit;
 
 
 public class App {
-
+    private static final String JSON_STORE = "./data/workroom.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
     private static final Scanner input = new Scanner(System.in);
-    private static final ArrayList<Event> eventSched = new ArrayList<>();
-    private static final ArrayList<String> timeSched = new ArrayList<>();
+    private static Schedule schedule;
 
 
     // EFFECTS: runs the scheduler application
-    public App() {
+    public App() throws FileNotFoundException {
+        schedule = new Schedule("Schedule1");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runApp();
     }
 
@@ -37,38 +45,57 @@ public class App {
             String command = input.nextLine();
             command = command.toUpperCase();
 
-            if  (command.contentEquals("EXIT")) {
+            if (command.contentEquals("EXIT")) {
                 contRunning = false;
                 exitScreen();
             } else {
-                processCommands(command);
+                chooseCommands(command);
             }
+        }
+    }
+
+    public void chooseCommands(String command) {
+        if (!processCommands(command) && !processMoreCommands(command)) {
+            System.out.println("Please enter a valid command!");
         }
     }
 
     //EFFECTS: processes user command
     // code from TellerApp
-    public void processCommands(String command) {
+    public boolean processCommands(String command) {
         switch (command) {
             case "S":
                 createEvent();
                 optionsScreen();
-                break;
+                return true;
             case "?":
                 helpScreen();
-                break;
+                return true;
             case "LIST":
                 list();
-                break;
+                return true;
             case "VIEW":
                 view();
-                break;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    //EFFECTS: processes more user commands
+    public boolean processMoreCommands(String command) {
+        switch (command) {
             case "FIND":
                 find();
-                break;
+                return true;
+            case "SAVE":
+                save();
+                return true;
+            case "LOAD":
+                load();
+                return true;
             default:
-                System.out.println("Please enter a valid command!");
-                break;
+                return false;
         }
     }
 
@@ -79,18 +106,19 @@ public class App {
     }
 
     //MODIFIES: this, eventSched, timeSched
-    //EFFECTS: prompts user to input time and name of an event, then prints the event name at the time given
+    //EFFECTS: prompts user to input time and name of an event,
+    // then prints the event name at the time given
     public static void createEvent() {
         System.out.println("Enter the event name:");
         String name = input.nextLine();
-        Event event = new Event(name);
         Runnable runEvent = new TimerTask() {
             @Override
             public void run() {
                 System.out.println(name);
             }
         };
-//      code learned from https://stackoverflow.com/questions/4927856/how-to-calculate-time-difference-in-java
+//      code learned from:
+//      https://stackoverflow.com/questions/4927856/how-to-calculate-time-difference-in-java
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         System.out.println("What time is it right now? (HH:MM:SS)");
@@ -102,12 +130,12 @@ public class App {
 
         long timeDiff = java.time.Duration.between(timeNow, eventTime).getSeconds();
 
-//      code learned from https://mkyong.com/java/java-scheduledexecutorservice-examples/
+//      code learned from:
+//      https://mkyong.com/java/java-scheduledexecutorservice-examples/
         ScheduledExecutorService eventAlarm = Executors.newScheduledThreadPool(1);
         eventAlarm.schedule(runEvent, timeDiff, TimeUnit.SECONDS);
 
-        eventSched.add(event);
-        timeSched.add(scheduledTime);
+        schedule.schedule(name, scheduledTime);
 
         System.out.println("Okay, your event has been set!");
     }
@@ -124,43 +152,75 @@ public class App {
         System.out.println("LIST to see how many events are scheduled for today.");
         System.out.println("VIEW to view today's schedule.");
         System.out.println("FIND to find the event scheduled at any time.");
+        System.out.println("SAVE to save the schedule you've made.");
+        System.out.println("LOAD to load previously saved schedules.");
+        System.out.println("PRINT to print saved schedule??");
         System.out.println("EXIT to exit.");
     }
 
     //EFFECTS: displays final schedule and closes program
     public void exitScreen() {
         System.out.println("Your schedule for today is set!");
+        System.out.println(" ");
         view();
+        System.out.println(" ");
         System.out.println("Have a nice day!");
     }
 
     //EFFECTS: displays number of events scheduled
     public void list() {
-        System.out.println("You have " + eventSched.size() + " events today.");
+        System.out.println("You have " + schedule.length() + " events today.");
     }
 
     //EFFECTS: displays full schedule
     public void view() {
         System.out.println("~-~-~-Schedule-~-~-~");
-        for (int i = 0; i < eventSched.size(); i++) {
-            Event e = eventSched.get(i);
-            if (e != null) {
-                System.out.print(e.getName() + " at " + timeSched.get(i) + "\n");
+        for (int i = 0; i < schedule.length(); i++) {
+            if (schedule.get(i) != null) {
+                System.out.println(schedule.get(i));
             } else {
                 System.out.println("You have no events scheduled for today!");
             }
+            System.out.println("--------------------");
         }
     }
 
-    //EFFECTS: finds and returns the event scheduled at the given time
+    //EFFECTS: returns the event scheduled at the given time,
+    // informs user if nothing is scheduled there
     public void find() {
+        boolean found = false;
         System.out.println("Please enter a time (HH:MM:SS).");
-        for (int i = 0; i <= timeSched.size(); i++) {
-            if (input.nextLine().equals(timeSched.get(i))) {
-                System.out.println(eventSched.get(i).getName() + " is scheduled for this time.");
-            } else {
-                System.out.println("Nothing is scheduled at this time.");
+        for (int i = 0; i < schedule.length(); i++) {
+            if (schedule.isSameTime(input.nextLine())) {
+                System.out.println(schedule.getEvent(i) + " is scheduled for this time.");
+                found = true;
             }
+        }
+        if (!found) {
+            System.out.println("There is nothing scheduled for this time.");
+        }
+    }
+
+    // EFFECTS: saves the schedule to file
+    private void save() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(schedule);
+            jsonWriter.close();
+            System.out.println("Saved " + schedule.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads schedule from file
+    private void load() {
+        try {
+            schedule = jsonReader.read();
+            System.out.println("Loaded " + schedule.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 }

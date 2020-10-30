@@ -20,3 +20,5 @@ List *bulleted* of User Stories:
 - As a user, I want to be able to view my schedule for the day
 - As a user, I want to be able to see the number of events I have for the day
 - As a user, I want to be able to find the event I scheduled at a certain time 
+- As a user, I want to be able to save my schedule to file
+- As a user, I want to be able to load a previous schedule from file
