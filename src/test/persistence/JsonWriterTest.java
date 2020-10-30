@@ -32,7 +32,7 @@ class JsonWriterTest {
     }
 
     @Test
-    void testWriterEmptyWorkroom() {
+    void testWriterEmptySchedule() {
         try {
             Schedule sch = new Schedule("Test Schedule");
             JsonWriter writer = new JsonWriter("./data/testWriterEmptySchedule.json");
@@ -50,7 +50,7 @@ class JsonWriterTest {
     }
 
     @Test
-    void testWriterGeneralWorkroom() {
+    void testWriterGeneralSchedule() {
         try {
             Schedule sch = new Schedule("Test Schedule");
             sch.schedule(testEvent, testTime);
