@@ -22,7 +22,7 @@ class JsonReaderTest {
     }
 
     @Test
-    void testReaderEmptyWorkRoom() {
+    void testReaderEmptySchedule() {
         JsonReader reader = new JsonReader("./data/testReaderEmptySchedule.json");
         try {
             Schedule sch = reader.read();
@@ -34,7 +34,7 @@ class JsonReaderTest {
     }
 
     @Test
-    void testReaderGeneralWorkRoom() {
+    void testReaderGeneralSchedule() {
         JsonReader reader = new JsonReader("./data/testReaderGeneralSchedule.json");
         try {
             Schedule sch = reader.read();
