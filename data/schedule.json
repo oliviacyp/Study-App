@@ -1,0 +1,13 @@
+{
+    "name": "Schedule1",
+    "events": [
+        {
+            "times": "11:00:00",
+            "names": "sigh"
+        },
+        {
+            "times": "12:00:00",
+            "names": "bigger sigh"
+        }
+    ]
+}

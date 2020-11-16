@@ -1,14 +1,16 @@
 package ui;
 
+import model.Event;
 import model.Schedule;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.Temporal;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class App {
-    private static final String JSON_STORE = "./data/workroom.json";
+    private static final String JSON_STORE = "./data/schedule.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private static final Scanner input = new Scanner(System.in);
@@ -128,16 +130,29 @@ public class App {
         String scheduledTime = input.nextLine();
         LocalTime eventTime = LocalTime.parse(scheduledTime, formatter);
 
-        long timeDiff = java.time.Duration.between(timeNow, eventTime).getSeconds();
+        long timeDiff = findTimeDiff(timeNow, eventTime);
 
 //      code learned from:
 //      https://mkyong.com/java/java-scheduledexecutorservice-examples/
         ScheduledExecutorService eventAlarm = Executors.newScheduledThreadPool(1);
         eventAlarm.schedule(runEvent, timeDiff, TimeUnit.SECONDS);
 
-        schedule.schedule(name, scheduledTime);
+        Event e = new Event(name, scheduledTime);
+        schedule.schedule(e);
 
         System.out.println("Okay, your event has been set!");
+    }
+
+    //EFFECTS: finds time difference between current time and event time
+    public static long findTimeDiff(Temporal timeNow, Temporal eventTime) {
+        long timeDiff;
+        long findingDiff = Duration.between(timeNow, eventTime).getSeconds();
+        if (findingDiff < 0) {
+            timeDiff = findingDiff + 3600;
+        } else {
+            timeDiff = findingDiff;
+        }
+        return timeDiff;
     }
 
     //EFFECTS: displays menu of options to user
@@ -154,7 +169,6 @@ public class App {
         System.out.println("FIND to find the event scheduled at any time.");
         System.out.println("SAVE to save the schedule you've made.");
         System.out.println("LOAD to load previously saved schedules.");
-        System.out.println("PRINT to print saved schedule??");
         System.out.println("EXIT to exit.");
     }
 
@@ -190,13 +204,17 @@ public class App {
     public void find() {
         boolean found = false;
         System.out.println("Please enter a time (HH:MM:SS).");
+        String findTime = input.nextLine();
+        int foundTime = 0;
         for (int i = 0; i < schedule.length(); i++) {
-            if (schedule.isSameTime(input.nextLine())) {
-                System.out.println(schedule.getEvent(i) + " is scheduled for this time.");
+            if (schedule.isSameTime(findTime) != -1) {
+                foundTime = schedule.isSameTime(findTime);
                 found = true;
             }
         }
-        if (!found) {
+        if (found) {
+            System.out.println(schedule.getEvent(foundTime) + " is scheduled for this time.");
+        } else {
             System.out.println("There is nothing scheduled for this time.");
         }
     }
