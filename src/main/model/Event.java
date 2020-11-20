@@ -6,6 +6,7 @@ import persistence.Writable;
 import java.util.Collections;
 import java.util.List;
 
+//represents an event with a name and a scheduled time
 public class Event implements Writable {
 
     public String name;

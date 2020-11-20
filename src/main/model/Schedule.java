@@ -4,12 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 //Represents a schedule including events and and their corresponding times
-public class Schedule implements Writable {
+public class Schedule extends Observable implements Writable {
 
     public String name;
     public ArrayList<String> schedule;
@@ -41,6 +39,15 @@ public class Schedule implements Writable {
         return -1;
     }
 
+    //REQUIRES: schedule is not empty
+    //MODIFIES: this
+    //EFFECTS: removes ith element from schedule
+    public void removeEvent(int i) {
+        if (schedule.size() > 0) {
+            schedule.remove(i);
+        }
+    }
+
     //EFFECTS: returns the ith element in schedule
     public String get(int i) {
         return schedule.get(i);
@@ -64,6 +71,14 @@ public class Schedule implements Writable {
     //EFFECTS: returns the list of events
     public List<Event> getEventList() {
         return Collections.unmodifiableList(events);
+    }
+
+    /**
+     * Adds an observer to the alarm
+     * @param o the observer to be added
+     */
+    public void addScheduleObserver(Observer o) {
+        this.addObserver(o);
     }
 
     @Override

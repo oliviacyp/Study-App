@@ -1,13 +1,17 @@
 {
-    "name": "Schedule1",
+    "name": "schedule",
     "events": [
         {
-            "times": "11:00:00",
-            "names": "sigh"
+            "times": "00:00:00",
+            "names": "a"
         },
         {
-            "times": "12:00:00",
-            "names": "bigger sigh"
+            "times": "00:00:00",
+            "names": "b"
+        },
+        {
+            "times": "00:00:00",
+            "names": "c"
         }
     ]
 }
