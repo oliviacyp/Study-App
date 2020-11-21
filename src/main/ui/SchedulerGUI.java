@@ -291,7 +291,7 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
 
         //Create and set up the content pane.
         JComponent newContentPane = new SchedulerGUI();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
 
         //Display the window.
