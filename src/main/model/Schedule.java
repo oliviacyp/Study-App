@@ -20,7 +20,7 @@ public class Schedule extends Observable implements Writable {
     }
 
     //MODIFIES: this
-    //EFFECTS: adds given event at given time to the schedule, and adds given time to list of times
+    //EFFECTS: adds given event at given time to the schedule, and adds given event to events
     public void schedule(Event event) {
         String scheduling = event.getName() + " at " + event.getTime();
         schedule.add(scheduling);
