@@ -45,6 +45,7 @@ public class Schedule extends Observable implements Writable {
     public void removeEvent(int i) {
         if (schedule.size() > 0) {
             schedule.remove(i);
+            events.remove(i);
         }
     }
 

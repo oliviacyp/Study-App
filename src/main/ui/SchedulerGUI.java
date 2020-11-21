@@ -58,7 +58,7 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
         JPanel buttonPane = makeJPanel();
 
         BufferedImage myPicture;
-        myPicture = ImageIO.read(new File("/Users/olivia/Downloads/CPSC210/project_t1j3b/data/project.png"));
+        myPicture = ImageIO.read(new File("./data/project.png"));
         JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -239,7 +239,6 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
     class SaveListener implements ActionListener {
         //EFFECTS: saves the schedule to file
         public void actionPerformed(ActionEvent e) {
-            view(); //todo; remove after fixing bug!
             save();
         }
     }
@@ -320,20 +319,6 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
             System.out.println("Loaded " + sch.getName() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
-        }
-    }
-
-    //todo: remove after debugging!
-    //EFFECTS: displays full schedule
-    public void view() {
-        System.out.println("~-~-~-Schedule-~-~-~");
-        for (int i = 0; i < sch.length(); i++) {
-            if (sch.get(i) != null) {
-                System.out.println(sch.get(i));
-            } else {
-                System.out.println("You have no events scheduled for today!");
-            }
-            System.out.println("--------------------");
         }
     }
 
