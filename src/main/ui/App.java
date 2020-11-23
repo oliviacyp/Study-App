@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
     private static final String JSON_STORE = "./data/schedule.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
     private static final Scanner input = new Scanner(System.in);
     private static Schedule schedule;
 
@@ -186,34 +187,29 @@ public class App {
         System.out.println("You have " + schedule.length() + " events today.");
     }
 
-    //EFFECTS: displays full schedule
+    //EFFECTS: displays the full schedule
     public void view() {
-        System.out.println("~-~-~-Schedule-~-~-~");
-        for (int i = 0; i < schedule.length(); i++) {
-            if (schedule.get(i) != null) {
-                System.out.println(schedule.get(i));
-            } else {
-                System.out.println("You have no events scheduled for today!");
+        if (schedule.getSchedule() != null) {
+            Set<String> keys = schedule.getSchedule().keySet();
+            System.out.println("~-~-~-Schedule-~-~-~");
+            for (String k : keys) {
+                if (k != null) {
+                    System.out.println((schedule.getEvent(k) + " at " + k));
+                    System.out.println("--------------------");
+                }
             }
-            System.out.println("--------------------");
+        } else {
+            System.out.println("You have no events scheduled for today!");
         }
     }
 
     //EFFECTS: returns the event scheduled at the given time,
     // informs user if nothing is scheduled there
     public void find() {
-        boolean found = false;
         System.out.println("Please enter a time (HH:MM:SS).");
-        String findTime = input.nextLine();
-        int foundTime = 0;
-        for (int i = 0; i < schedule.length(); i++) {
-            if (schedule.isSameTime(findTime) != -1) {
-                foundTime = schedule.isSameTime(findTime);
-                found = true;
-            }
-        }
-        if (found) {
-            System.out.println(schedule.getEvent(foundTime) + " is scheduled for this time.");
+        String foundEvent = schedule.getEvent(input.nextLine());
+        if (foundEvent != null) {
+            System.out.println(foundEvent + " is scheduled for this time.");
         } else {
             System.out.println("There is nothing scheduled for this time.");
         }

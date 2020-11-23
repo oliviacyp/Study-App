@@ -14,11 +14,17 @@
  still has a long way to go, and this is only the most basic set up of what I had imagined. 
 
 ## User Stories 
-
-List *bulleted* of User Stories:
+List of User Stories:
 - As a user, I want to be able to create event reminders for specific times in the schedule 
 - As a user, I want to be able to view my schedule for the day
 - As a user, I want to be able to see the number of events I have for the day
 - As a user, I want to be able to find the event I scheduled at a certain time 
 - As a user, I want to be able to save my schedule to file
 - As a user, I want to be able to load a previous schedule from file
+
+## Phase 4: Task 2
+**Make appropriate use of the Map interface somewhere in your code.**
+
+List of Classes using Map interface:
+- Schedule
+- SchedulerGUI

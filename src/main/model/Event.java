@@ -3,14 +3,11 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.Collections;
-import java.util.List;
-
-//represents an event with a name and a scheduled time
+//Represents an event with a name and a scheduled time.
 public class Event implements Writable {
 
-    public String name;
-    public String time;
+    private final String name;
+    private final String time;
 
     public Event(String name, String time) {
         this.name = name;

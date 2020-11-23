@@ -18,15 +18,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.*;
 
-//represents a scheduling app that keeps track of the events added to it
+//Represents a scheduling app that keeps track of the events added to it.
 
 //classes implementing ActionListener taken from ListDemo launcher
 //https://docs.oracle.com/javase/tutorial/uiswing/components/list.html
 
 public class SchedulerGUI extends JPanel implements ListSelectionListener {
     private JList list;
-    private DefaultListModel listModel = new DefaultListModel();
+    private final DefaultListModel listModel = new DefaultListModel();
+    private final Map<Integer, String> keyList = new HashMap<>();
     private static final String addString = "Add Event";
     private static final String removeString = "Remove Event";
     private static final String saveString = "Save Schedule";
@@ -36,14 +38,13 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
     private JButton removeButton;
     private JButton saveButton;
     private JButton loadButton;
-
     private JTextField eventName;
     private JTextField eventTime;
 
     private Schedule sch = new Schedule("schedule");
     private static final String JSON_STORE = "./data/schedule.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
 
     public SchedulerGUI() throws IOException {
         super(new BorderLayout());
@@ -83,14 +84,10 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
         eventName = new JTextField(18);
         eventName.addActionListener(addListener);
         eventName.getDocument().addDocumentListener(addListener);
-        String name = listModel.getElementAt(
-                list.getSelectedIndex()).toString();
 
         eventTime = new JTextField(18);
         eventTime.addActionListener(addListener);
         eventTime.getDocument().addDocumentListener(addListener);
-        String time = listModel.getElementAt(
-                list.getSelectedIndex()).toString();
 
         eventName.setText("enter event name!");
         eventTime.setText("enter event time! (HH:MM:SS:)");
@@ -123,8 +120,7 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
     //EFFECTS: sets up the button panel and adds all buttons and text fields to it
     public JPanel makeJPanel() {
         JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane,
-                BoxLayout.LINE_AXIS));
+        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.add(removeButton);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
@@ -143,21 +139,15 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
             listModel.remove(index);
-
-            if (index >= 0) {
-                sch.removeEvent(index - 1);
-            }
+            sch.removeEvent(keyList.get(index));
 
             int size = listModel.getSize();
-
             if (size == 0) {
                 removeButton.setEnabled(false);
-
-            } else { //Select an index.
+            } else {
                 if (index == listModel.getSize()) {
                     index--;
                 }
-
                 list.setSelectedIndex(index);
                 list.ensureIndexIsVisible(index);
             }
@@ -166,7 +156,7 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
 
     class AddListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
-        private JButton button;
+        private final JButton button;
 
         public AddListener(JButton button) {
             this.button = button;
@@ -177,7 +167,6 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
         public void actionPerformed(ActionEvent e) {
             String name = eventName.getText();
             String time = eventTime.getText();
-            String toSched = eventName.getText();
 
             int index = list.getSelectedIndex();
             if (index == -1) {
@@ -187,13 +176,14 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
             }
 
             listModel.insertElementAt(name + " at " + time, index);
+            keyList.put(index, time);
             eventName.requestFocusInWindow();
             eventName.setText("");
             eventTime.setText("");
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
 
-            Event event = new Event(toSched,time);
+            Event event = new Event(name,time);
             sch.schedule(event);
         }
 
@@ -256,9 +246,12 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
 
             load();
 
-            for (int i = 0; i < sch.length(); i++) {
-                if (sch.get(i) != null) {
-                    listModel.insertElementAt(sch.get(i), index);
+            Set<String> keys = sch.getSchedule().keySet();
+            for (String k : keys) {
+                if (sch.getSchedule().get(k) != null && sch.getEvent(k) != null) {
+                    String name = sch.getEvent(k);
+                    listModel.insertElementAt(name + " at " + k, index);
+                    keyList.put(index,k);
                 } else {
                     listModel.insertElementAt("There is no data saved on file.", index);
                 }
@@ -272,14 +265,8 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
     //Required by implementing ListSelectionListener.
     //EFFECTS: disables removeButton if no valid index/slot in schedule is selected
     public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() == false) {
-
-            if (list.getSelectedIndex() == -1) {
-                removeButton.setEnabled(false);
-
-            } else {
-                removeButton.setEnabled(true);
-            }
+        if (!e.getValueIsAdjusting()) {
+            removeButton.setEnabled(list.getSelectedIndex() != -1);
         }
     }
 
@@ -324,13 +311,11 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
 
     //EFFECTS: runs SchedulerGUI
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    createAndShowGUI();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            try {
+                createAndShowGUI();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
