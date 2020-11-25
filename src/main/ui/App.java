@@ -18,6 +18,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+* Represents a Scheduler console application.
+*/
 
 public class App {
     private static final String JSON_STORE = "./data/schedule.json";
@@ -57,6 +60,8 @@ public class App {
         }
     }
 
+    //EFFECTS: runs processCommands and processMoreCommands
+    // tells user to input valid command if command is not valid
     public void chooseCommands(String command) {
         if (!processCommands(command) && !processMoreCommands(command)) {
             System.out.println("Please enter a valid command!");

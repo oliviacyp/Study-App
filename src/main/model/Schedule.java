@@ -6,7 +6,10 @@ import persistence.Writable;
 
 import java.util.*;
 
-//Represents a schedule including events and and their corresponding times.
+/**
+* Represents a schedule of events and and their corresponding times.
+*/
+
 public class Schedule extends Observable implements Writable {
 
     private final String name;
@@ -26,8 +29,7 @@ public class Schedule extends Observable implements Writable {
     //MODIFIES: this
     //EFFECTS: removes the event mapped to the given time from events in the schedule
     public boolean removeEvent(String timeKey) {
-        if (events.size() > 0
-                && (events.get(timeKey) != null || events.get(timeKey) != null)) {
+        if (events.size() > 0 && events.get(timeKey) != null) {
             events.remove(timeKey);
             return true;
         } else {
@@ -54,7 +56,7 @@ public class Schedule extends Observable implements Writable {
         return name;
     }
 
-    //EFFECTS: returns the the size of list of events
+    //EFFECTS: returns the the size of events
     public int length() {
         return events.size();
     }

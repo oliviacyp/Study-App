@@ -81,6 +81,15 @@ public class ScheduleTest {
     }
 
     @Test
+    public void testRemoveEventWithNullKey() {
+        assertNull(schedule.getEvents().get("01:23:45"));
+        schedule.removeEvent("01:23:45");
+        assertEquals(schedule.getEvents().get("00:00:00"),e1);
+        assertEquals(schedule.getEvent("00:00:00"),"event");
+        assertEquals(schedule.length(), 1);
+    }
+
+    @Test
     public void testGetEvent() {
         assertEquals(schedule.getEvent("00:00:00"),"event");
     }

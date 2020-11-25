@@ -20,7 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-//Represents a scheduling app that keeps track of the events added to it.
+/**
+ * Represents a graphical Scheduler app that keeps track of the events added to it.
+ */
 
 //classes implementing ActionListener taken from ListDemo launcher
 //https://docs.oracle.com/javase/tutorial/uiswing/components/list.html
@@ -158,6 +160,8 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
         private boolean alreadyEnabled = false;
         private final JButton button;
 
+        //MODIFIES: this
+        //EFFECTS: sets the JButton button to the given button
         public AddListener(JButton button) {
             this.button = button;
         }

@@ -3,7 +3,10 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-//Represents an event with a name and a scheduled time.
+/**
+* Represents an event with a name and a scheduled time.
+*/
+
 public class Event implements Writable {
 
     private final String name;
