@@ -189,8 +189,8 @@ public class App {
 
     //EFFECTS: displays the full schedule
     public void view() {
-        if (schedule.getSchedule() != null) {
-            Set<String> keys = schedule.getSchedule().keySet();
+        if (schedule.getEvents() != null) {
+            Set<String> keys = schedule.getEvents().keySet();
             System.out.println("~-~-~-Schedule-~-~-~");
             for (String k : keys) {
                 if (k != null) {

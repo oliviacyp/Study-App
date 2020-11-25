@@ -28,3 +28,12 @@ List of User Stories:
 List of Classes using Map interface:
 - Schedule
 - SchedulerGUI
+
+## Phase 4: Task 3
+If I had more time to work on this project, I would do some significant refactoring to improve the
+design. As it is, I would worry that there is a risk of high coupling, especially due to all the
+different Maps and Lists used to keep track of everything in all the different classes.
+
+List of Possible Refactoring To Do:
+- Split SchedulerGUI into multiple Class files instead of all Classes contained in one
+- SchedulerGUI extend App 

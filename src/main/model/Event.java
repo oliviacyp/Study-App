@@ -19,12 +19,14 @@ public class Event implements Writable {
         return name;
     }
 
-    //EFFECTS: returns the ith element in events
+    //EFFECTS: returns the time of the event
     public String getTime() {
         return time;
     }
 
     @Override
+    //EFFECTS: creates a JSONObject and puts the fields of each event
+    //with the corresponding keys
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("names", name);

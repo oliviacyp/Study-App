@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,26 +48,26 @@ class JsonWriterTest {
         }
     }
 
-//    @Test
-//    void testWriterGeneralSchedule() {
-//        try {
-//            Schedule sch = new Schedule("Test Schedule");
-//            sch.schedule(testEvent);
-//            sch.schedule(testEvent2);
-//            JsonWriter writer = new JsonWriter("./data/testReaderGeneralSchedule.json");
-//            writer.open();
-//            writer.write(sch);
-//            writer.close();
-//            JsonReader reader = new JsonReader("./data/testReaderGeneralSchedule.json");
-//            sch = reader.read();
-//            assertEquals("Test Schedule", sch.getName());
-//            List<Event> events = sch.getEventList();
-//            assertEquals(2, events.size());
-//            assertEquals("Test Event", events.get(0));
-//            assertEquals("Test Event2", events.get(1));
-//
-//        } catch (IOException e) {
-//            fail("Exception should not have been thrown.");
-//        }
-//    }
+    @Test
+    void testWriterGeneralSchedule() {
+        try {
+            Schedule sch = new Schedule("Test Schedule");
+            sch.schedule(testEvent);
+            sch.schedule(testEvent2);
+            JsonWriter writer = new JsonWriter("./data/testReaderGeneralSchedule.json");
+            writer.open();
+            writer.write(sch);
+            writer.close();
+            JsonReader reader = new JsonReader("./data/testReaderGeneralSchedule.json");
+            sch = reader.read();
+            assertEquals("Test Schedule", sch.getName());
+            Map<String,Event> events = sch.getEventList();
+            assertEquals(2, events.size());
+            assertEquals("Test Event", sch.getEvent("00:00:00"));
+            assertEquals("Test Event2", sch.getEvent("11:11:11"));
+
+        } catch (IOException e) {
+            fail("Exception should not have been thrown.");
+        }
+    }
 }

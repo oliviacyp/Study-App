@@ -3,11 +3,11 @@
     "events": [
         {
             "times": "00:00:00",
-            "names": "a"
+            "names": "hello"
         },
         {
-            "times": "02:00:00",
-            "names": "c"
+            "times": "10:00:00",
+            "names": "uwuuu"
         }
     ]
 }

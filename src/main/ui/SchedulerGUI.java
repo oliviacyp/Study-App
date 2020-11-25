@@ -246,9 +246,9 @@ public class SchedulerGUI extends JPanel implements ListSelectionListener {
 
             load();
 
-            Set<String> keys = sch.getSchedule().keySet();
+            Set<String> keys = sch.getEvents().keySet();
             for (String k : keys) {
-                if (sch.getSchedule().get(k) != null && sch.getEvent(k) != null) {
+                if (sch.getEvents().get(k) != null && sch.getEvent(k) != null) {
                     String name = sch.getEvent(k);
                     listModel.insertElementAt(name + " at " + k, index);
                     keyList.put(index,k);
