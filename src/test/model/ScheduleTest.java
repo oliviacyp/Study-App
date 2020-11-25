@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ScheduleTest {
 
     private Schedule schedule;
-    private Event e1 = new Event("event", "00:00:00");
-    private Event e2 = new Event("event2", "11:11:11");
+    private final Event e1 = new Event("event", "00:00:00");
+    private final Event e2 = new Event("event2", "11:11:11");
 
     @BeforeEach
     public void setup() {
