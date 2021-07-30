@@ -1,5 +1,3 @@
-# My Personal Project
-
 ## Schedule App
     
  This ***Schedule App*** is going to help people schedule their time so that each day is more productive. It 
@@ -12,27 +10,6 @@
  is of interest to me because I am definitely one of those people who needs some extra help keeping my time 
  organized. I actually had an idea for this a while ago, and this project helped me get it started. However, it 
  still has a long way to go, and this is only the most basic set up of what I had imagined. 
-
-## User Stories 
-List of User Stories:
-- As a user, I want to be able to create event reminders for specific times in the schedule 
-- As a user, I want to be able to view my schedule for the day
-- As a user, I want to be able to see the number of events I have for the day
-- As a user, I want to be able to find the event I scheduled at a certain time 
-- As a user, I want to be able to save my schedule to file
-- As a user, I want to be able to load a previous schedule from file
-
-## Phase 4: Task 2
-**Make appropriate use of the Map interface somewhere in your code.**
-
-List of Classes using Map interface:
-- Schedule
-- SchedulerGUI
-
-## Phase 4: Task 3
-If I had more time to work on this project, I would do some significant refactoring to improve the
-design. As it is, I would worry that there is a risk of high coupling, especially due to all the
-different Maps and Lists used to keep track of everything in all the different classes.
 
 List of Possible Refactoring To Do:
 - Split SchedulerGUI into multiple Class files instead of all Classes contained in one
